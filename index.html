@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GraphicGuard AI Agent | مساعد الهوية البصرية</title>
+<style>
+:root {--bg-color:#f8fafc;--card-bg:#ffffff;--text-color:#1e293b;--primary:#2563eb;--border-color:#e2e8f0;}
+body {font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:var(--bg-color);color:var(--text-color);margin:0;padding:20px;direction:rtl;}
+.container {max-width:800px;margin:0 auto;background:var(--card-bg);padding:30px;border-radius:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);}
+h1 {color:var(--primary);text-align:center;margin-bottom:5px;} p.subtitle {text-align:center;color:#64748b;margin-bottom:30px;}
+.form-group {margin-bottom:20px;} label {display:block;font-weight:bold;margin-bottom:8px;}
+input,textarea,select {width:100%;padding:12px;border:1px solid var(--border-color);border-radius:8px;font-size:14px;box-sizing:border-box;}
+button {background-color:var(--primary);color:white;border:none;padding:12px 20px;font-size:16px;border-radius:8px;cursor:pointer;width:100%;font-weight:bold;transition:background .2s;}button:hover{background-color:#1d4ed8;}
+.result-box {margin-top:30px;padding:20px;border:1px solid var(--border-color);border-radius:12px;background:#f1f5f9;display:none;}
+.color-palette {display:flex;gap:10px;margin-top:10px;}.color-card {flex:1;height:70px;border-radius:8px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:5px;font-size:12px;font-weight:bold;color:#333;border:1px solid #ccc;}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🎨 GraphicGuard AI Agent</h1>
+<p class="subtitle">مساعد بناء الهوية البصرية | HTML + Python</p>
+<div class="form-group"><label>اسم المشروع</label><input type="text" id="projectName" placeholder="مثال: رَوق"></div>
+<div class="form-group"><label>وصف المشروع</label><textarea id="projectDesc" rows="3" placeholder="مقهى سعودي يقدم القهوة المختصة"></textarea></div>
+<div class="form-group"><label>الجمهور المستهدف</label><input type="text" id="projectAudience" placeholder="شباب من 18 إلى 30 سنة"></div>
+<div class="form-group"><label>الأسلوب المفضل</label><select id="projectTheme"><option value="هادئ وعصري">هادئ وعصري</option><option value="فاخر">فاخر</option><option value="مرح وشبابي">مرح وشبابي</option><option value="تقني">تقني</option></select></div>
+<button onclick="generateBrand()">إنشاء تصور الهوية البصرية</button>
+<div id="resultSection" class="result-box"><h2 id="resName" style="color:var(--primary);margin-top:0;"></h2><p><strong>النشاط:</strong> <span id="resDesc"></span></p><p><strong>الجمهور:</strong> <span id="resAudience"></span></p>
+<h3>2. Moodboard — لوحة الإلهام</h3><p id="resStyle"></p>
+<h3>3. Color Palette — لوحة الألوان</h3><div class="color-palette" id="resColors"></div>
+<h3>4. Typography — الخطوط</h3><p id="resFonts"></p>
+<h3>6. أفكار الشعار</h3><p id="resLogo"></p>
+<h3>7. توصية Python</h3><p id="resPython"></p>
+</div></div>
+<script>
+const themesData = {
+'هادئ وعصري':{colors:['#F5F1E8','#A8B5A2','#42564B','#222B26'],fonts:'Cairo / IBM Plex Sans Arabic',style:'مساحات بيضاء، صور طبيعية، عناصر بسيطة',logo:'شعار نصي بحروف هندسية ناعمة'},
+'فاخر':{colors:['#171717','#C5A46D','#F5F0E7','#6D5845'],fonts:'Tajawal / Amiri',style:'تباين قوي، تفاصيل دقيقة، مساحات واسعة',logo:'شعار حرفي أنيق أو رمز هندسي'},
+'مرح وشبابي':{colors:['#FF6B6B','#FFD166','#06D6A0','#263238'],fonts:'Changa / Cairo',style:'أشكال مرحة، تباين واضح، صور حيوية',logo:'رمز بسيط قابل للتحويل إلى ملصق'},
+'تقني':{colors:['#111827','#2563EB','#67E8F9','#F9FAFB'],fonts:'IBM Plex Sans Arabic / Tajawal',style:'شبكات هندسية، أيقونات خطية، تدرجات خفيفة',logo:'أيقونة هندسية مستوحاة من النشاط'}
+};
+async function generateBrand(){
+const name=document.getElementById('projectName').value.trim();
+const desc=document.getElementById('projectDesc').value.trim();
+const audience=document.getElementById('projectAudience').value.trim() || 'جمهور عام';
+const themeKey=document.getElementById('projectTheme').value;
+if(!name || !desc){alert('الرجاء إدخال اسم المشروع ووصفه أولاً.');return;}
+const theme=themesData[themeKey];
+document.getElementById('resName').innerText=`هوية مشروع: ${name}`;
+document.getElementById('resDesc').innerText=desc;
+document.getElementById('resAudience').innerText=audience;
+document.getElementById('resStyle').innerText=theme.style;
+document.getElementById('resFonts').innerText=theme.fonts;
+document.getElementById('resLogo').innerText=theme.logo;
+const colorsContainer=document.getElementById('resColors');colorsContainer.innerHTML='';
+theme.colors.forEach(color=>{const div=document.createElement('div');div.className='color-card';div.style.backgroundColor=color;div.innerText=color;if(['#171717','#111827','#222B26'].includes(color))div.style.color='#fff';colorsContainer.appendChild(div);});
+document.getElementById('resPython').innerText='جاري حساب التوصية...';
+document.getElementById('resultSection').style.display='block';
+try {const response=await fetch('/recommend',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({theme:themeKey})});if(!response.ok)throw new Error('Request failed');const data=await response.json();document.getElementById('resPython').innerText=data.recommendation;}catch(error){document.getElementById('resPython').innerText='تعذر الاتصال بخادم Python. تأكدي من تشغيل app.py.';}
+}
+</script>
+</body></html>
